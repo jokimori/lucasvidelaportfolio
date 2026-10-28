@@ -1,0 +1,11 @@
+# Cloudflare Pages / Netlify: los libros y las tapas no cambian, se cachean fuerte.
+# Otros hostings ignoran este archivo sin problema.
+
+/libros/*
+  Cache-Control: public, max-age=2592000
+
+/tapas/*
+  Cache-Control: public, max-age=2592000
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate

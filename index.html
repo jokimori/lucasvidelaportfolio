@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portfolio de Lucas Videla: libros para descargar gratis, textos de diario, obra visual y escultura.">
+<meta name="author" content="Lucas Videla">
+<meta property="og:title" content="Lucas Videla — Escritura y formas de la memoria">
+<meta property="og:description" content="Libros para descargar gratis, textos de diario y obra visual.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1064 1360'%3E%3Cpath d='M 24 6 H 936 a 8 8 0 0 1 8 8 V 26 a 8 8 0 0 0 8 8 H 1036 a 24 24 0 0 1 24 24 V 542 L 1000 622 V 1330 a 24 24 0 0 1 -24 24 H 24 a 24 24 0 0 1 -24 -24 V 30 a 24 24 0 0 1 24 -24 Z' fill='none' stroke='%231D1C1A' stroke-width='40'/%3E%3C/svg%3E">
+<style>
+  /* base mínima, equivalente a la que ponía el visor */
+  :root{
+    color-scheme:light dark;
+    padding-top:env(safe-area-inset-top, 0px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  body{margin:0; padding:0}
+  img{max-width:100%}
+  [hidden]{display:none !important}
+</style>
+<title>Lucas Videla Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap">
+<style>
+  :root{
+    --ground:#F3F1ED;
+    --page:#FFFFFF;
+    --line:#1D1C1A;
+    --ink:#1D1C1A;
+    --muted:#8C887F;
+    --rule:#DCD8CF;
+    --focus:#9A7B4F;
+    --tierra:#8A6F57;
+    --postit:#EFE6C0;
+    --postit-ink:#26231A;
+    --postit-tenue:#7C7355;
+    --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --serif:"Spectral", Georgia, "Times New Roman", serif;
+    --ratio:0.7353;          /* ancho / alto de una hoja */
+    --dur:820ms;
+    --ease:cubic-bezier(.32,.72,.26,1);
+    --stroke:1.15;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#121211;
+      --page:#1C1C1A;
+      --line:#847F77;
+      --ink:#EAE7E1;
+      --muted:#7B7872;
+      --rule:#2D2C29;
+      --focus:#C79E68;
+      --tierra:#BE9A6E;
+      --postit:#33301F;
+      --postit-ink:#EDE7D4;
+      --postit-tenue:#9A9276;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#121211;
+    --page:#1C1C1A;
+    --line:#847F77;
+    --ink:#EAE7E1;
+    --muted:#7B7872;
+    --rule:#2D2C29;
+    --focus:#C79E68;
+    --tierra:#BE9A6E;
+    --postit:#33301F;
+    --postit-ink:#EDE7D4;
+    --postit-tenue:#9A9276;
+  }
+
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--mono);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .app{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding-inline:16px;
+  }
+
+  /* ---------- chrome ---------- */
+  .top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    padding-block:18px 10px;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+  .mark{color:var(--ink)}
+  .top .meta{color:var(--muted); text-align:right}
+
+  .stage{
+    flex:1;
+    min-height:0;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    touch-action:pan-y;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .stage:focus-visible{outline:1px solid var(--focus); outline-offset:-2px; border-radius:2px}
+
+  .hint{
+    margin:0;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    transition:opacity 420ms ease;
+    pointer-events:none;
+    white-space:nowrap;
+  }
+  .hint[data-off="1"]{opacity:0}
+
+  .bar{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    padding-block:12px 20px;
+  }
+  .ctrl{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+  }
+  .nav{
+    appearance:none;
+    background:none;
+    border:1px solid var(--rule);
+    border-radius:999px;
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color 200ms ease, opacity 200ms ease;
+  }
+  .nav:hover:not(:disabled){border-color:var(--line)}
+  .nav:focus-visible{outline:1px solid var(--focus); outline-offset:2px}
+  .nav:disabled{opacity:.28; cursor:default}
+  .nav svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+  .count{
+    font-size:11px;
+    letter-spacing:.18em;
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
+    min-width:84px;
+    text-align:center;
+  }
+
+  /* ---------- carpeta ---------- */
+  .clip{
+    position:relative;
+    flex:0 0 auto;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .book{
+    position:relative;
+    flex:0 0 auto;
+    width:calc(var(--pw, 300px) * 2);
+    height:var(--ph, 408px);
+    perspective:2800px;
+    perspective-origin:var(--po, 75%) 50%;
+    transform:translateX(var(--tx, -25%));
+    transition:transform var(--dur) var(--ease), perspective-origin var(--dur) var(--ease);
+  }
+
+  .leaf,.base{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:50%;
+    height:100%;
+  }
+  .base{z-index:0}
+  .leaf{
+    transform-origin:left center;
+    transform-style:preserve-3d;
+    transition:transform var(--dur) var(--ease);
+  }
+  .leaf.flipped{transform:rotateY(-180deg)}
+
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .face.back{transform:rotateY(180deg)}
+  /* sólo la cara que se está viendo recibe clics */
+  .leaf .face.back{pointer-events:none}
+  .leaf.flipped .face.back{pointer-events:auto}
+  .leaf.flipped .face.front{pointer-events:none}
+
+  .inner{position:absolute; inset:0}
+  .face.r .inner{transform:translateX(1.5%)}
+  .face.l .inner{transform:translateX(-1.5%)}
+
+  .sheet{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:106.4%;
+    overflow:visible;
+  }
+  .face.r .sheet{left:0}
+  .face.l .sheet{left:-6.4%}
+
+  .sheet .body{fill:var(--page); stroke:var(--line)}
+  .sheet .frame{fill:none; stroke:var(--line)}
+  .sheet .hoja{fill:var(--page); stroke:var(--line)}
+  .sheet .body,.sheet .frame,.sheet .hoja{
+    stroke-width:var(--stroke);
+    vector-effect:non-scaling-stroke;
+  }
+
+  .sheet.shade{pointer-events:none; opacity:0}
+  .leaf.moving .sheet.shade{animation:shade var(--dur) var(--ease)}
+  @keyframes shade{
+    0%{opacity:0}
+    45%{opacity:.85}
+    100%{opacity:0}
+  }
+
+  /* ---------- contenido de cada página ---------- */
+  .slot{
+    position:absolute;
+    left:5.6%;
+    right:5.6%;
+    top:4.7%;
+    bottom:4.7%;
+    overflow:hidden;
+    clip-path:inset(0);
+    contain:paint;
+    box-sizing:border-box;
+    padding:5% 5.5%;
+    display:flex;
+    flex-direction:column;
+    font-family:var(--serif);
+    font-weight:300;
+    --cuerpo:clamp(10px, calc(var(--pw, 300px) * .036), 19px);
+    font-size:calc(var(--cuerpo) * var(--ajuste, 1));
+    line-height:1.55;
+    color:var(--ink);
+  }
+  .slot *{box-sizing:border-box}
+  .slot.compacta{padding:2.6% 4%}
+  .slot.apretada{overflow-y:auto; overflow-x:hidden; scrollbar-width:thin}
+  .slot p,.slot figure,.slot figcaption,.slot blockquote{margin:0}
+  .slot h1,.slot h2,.slot h3{
+    font-family:var(--serif);
+    font-weight:300;
+    line-height:1.12;
+    letter-spacing:-.01em;
+    margin:0;
+  }
+
+  .slot .eyebrow{
+    display:flex;
+    align-items:baseline;
+    gap:.8em;
+    font-family:var(--mono);
+    font-size:.68em;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .slot .eyebrow::after{content:""; flex:1; height:1px; background:var(--rule)}
+  .slot .eyebrow .num{color:var(--tierra); font-variant-numeric:tabular-nums}
+
+  .slot .p-title{font-size:1.78em; margin-top:.85em; max-width:21ch; text-wrap:balance}
+  .slot .nw{white-space:nowrap}
+  .slot .p-intro{font-style:italic; color:var(--muted); margin-top:.7em; font-size:.95em; max-width:36ch}
+
+  .slot .ph{
+    border:1px solid var(--rule);
+    display:grid;
+    place-items:center;
+    text-align:center;
+    padding:.4em;
+    aspect-ratio:1/1;
+    font-family:var(--mono);
+    font-size:.55em;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    overflow-wrap:anywhere;
+  }
+  .slot .ph.tapa{aspect-ratio:2/3}
+  .slot .ph.vert{aspect-ratio:3/4}
+
+  .slot .contratapa{
+    font-size:.94em;
+    line-height:1.5;
+    color:var(--ink);
+    margin-top:.5em;
+  }
+  .slot .desc{margin-top:.5em}
+  .slot .frag{
+    font-style:italic;
+    color:var(--muted);
+    border-left:1px solid var(--rule);
+    padding-left:.8em;
+    margin-top:.6em;
+  }
+  .slot .links{display:flex; flex-wrap:wrap; gap:1.2em; margin-top:.7em}
+  .slot .links a{
+    font-family:var(--mono);
+    font-size:.62em;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:1px solid var(--tierra);
+    padding-bottom:.2em;
+  }
+  .slot .links a:hover{color:var(--tierra)}
+
+  /* tapa */
+  .slot .cover-title{font-size:2.9em; line-height:1.02; margin-top:.55em}
+  .slot .cover-sub{font-style:italic; color:var(--muted); margin-top:.85em; font-size:1.05em; max-width:20ch}
+  .slot .cover-foot, .slot .colofon{
+    margin-top:auto;
+    font-family:var(--mono);
+    font-size:.6em;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .slot .colofon{text-align:center; margin-bottom:auto; align-self:center}
+
+  /* carátulas de sección */
+  .slot .caratula{margin-block:auto}
+  .slot .c-num{
+    display:block;
+    font-family:var(--mono);
+    font-size:.68em;
+    letter-spacing:.2em;
+    color:var(--tierra);
+    font-variant-numeric:tabular-nums;
+  }
+  .slot .c-rule{width:2.6em; height:1px; background:var(--rule); margin:.95em 0}
+  .slot .c-title{font-size:2.4em; line-height:1.05; max-width:13ch; text-wrap:balance}
+
+  /* índice */
+  .slot .indice{display:flex; flex-direction:column; margin-top:1.25em}
+  .slot .indice .row{
+    display:flex;
+    align-items:baseline;
+    gap:1em;
+    font-size:.88em;
+    padding:.32em 0;
+    border-top:1px solid var(--rule);
+    width:100%;
+    text-align:left;
+    background:none;
+    border-left:0;
+    border-right:0;
+    border-bottom:0;
+    font:inherit;
+    color:inherit;
+    cursor:pointer;
+    transition:color 220ms ease;
+  }
+  .slot button.row:hover{color:var(--tierra)}
+  .slot button.row:focus-visible{outline:1px solid var(--focus); outline-offset:2px}
+  .slot .indice .row:last-child{border-bottom:1px solid var(--rule)}
+  .slot .indice .n{
+    font-family:var(--mono);
+    font-size:.62em;
+    letter-spacing:.1em;
+    color:var(--tierra);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* libros */
+  .slot .stack{display:flex; flex-direction:column; gap:1.7em; margin-top:1.5em}
+  .slot .libro{display:grid; grid-template-columns:30% 1fr; gap:1.2em; align-items:start}
+  .slot .libro.solo{
+    display:flex;
+    flex-direction:column;
+    gap:1.1em;
+    margin-block:auto;
+  }
+  .slot .libro.solo .tapa-libro{width:44%; align-self:flex-start}
+  .slot .libro h3{font-size:1.35em}
+
+  /* diario */
+  .slot .frags{display:flex; flex-direction:column; gap:.8em; margin-top:1.4em}
+  .slot .frag-item{border-top:1px solid var(--rule); padding-top:.55em}
+  .slot .cat{
+    font-family:var(--mono);
+    font-size:.58em;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--tierra);
+    display:block;
+    margin-bottom:.25em;
+  }
+
+  /* obra visual */
+  .slot .serie{
+    font-family:var(--mono);
+    font-size:.6em;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--tierra);
+    margin-top:.8em;
+    margin-bottom:.4em;
+  }
+  .slot .grid3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5em}
+  .slot .grid3 .ph{aspect-ratio:4/3}
+  .slot .grid4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.55em; margin-top:1.3em}
+  .slot .pie{
+    font-family:var(--mono);
+    font-size:.5em;
+    letter-spacing:.05em;
+    line-height:1.4;
+    color:var(--muted);
+    margin-top:.25em;
+    overflow-wrap:anywhere;
+  }
+  .slot .pie b{color:var(--ink); font-weight:400}
+  .slot .nota{font-style:italic; color:var(--muted); margin-top:1.2em; max-width:32ch; font-size:.95em}
+
+  /* textos del diario */
+  .slot .t-title{font-size:1.5em; margin-top:.9em; max-width:21ch; text-wrap:balance}
+  .slot .t-fecha{
+    font-family:var(--mono);
+    font-size:.58em;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--tierra);
+    margin-top:.55em;
+  }
+  .slot .texto{
+    display:flex;
+    flex-direction:column;
+    gap:.7em;
+    margin-top:1.1em;
+    font-size:.94em;
+    line-height:1.6;
+  }
+  .slot .texto.verso{line-height:1.7}
+  .slot .texto.verso .v{display:block; padding-left:1.2em; text-indent:-1.2em}
+
+  /* sobre mí */
+  .slot .bio{display:flex; flex-direction:column; gap:.8em; margin-top:1.4em; max-width:44ch}
+
+  @media (prefers-reduced-motion: reduce){
+    :root{--dur:1ms}
+    .leaf.moving .sheet.shade{animation:none}
+    .hint{transition:none}
+  }
+
+  /* libros: tapa real + acciones */
+  .slot .tapa-libro{
+    border:1px solid var(--rule);
+    aspect-ratio:.707;
+    overflow:hidden;
+    background:var(--ground);
+  }
+  .slot .tapa-libro img{width:100%; height:100%; object-fit:cover; display:block}
+  .slot .acciones{display:flex; flex-wrap:wrap; gap:1.1em; margin-top:.8em}
+  .slot .accion{
+    appearance:none;
+    background:none;
+    border:0;
+    border-bottom:1px solid var(--tierra);
+    padding:0 0 .2em;
+    font-family:var(--mono);
+    font-size:.62em;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink);
+    cursor:pointer;
+    transition:color 220ms ease;
+  }
+  .slot .accion:hover{color:var(--tierra)}
+  .slot .accion:focus-visible{outline:1px solid var(--focus); outline-offset:3px}
+
+  /* ---------- papeles que se suman a la escena ---------- */
+  .velo{
+    position:fixed;
+    inset:0;
+    z-index:55;
+    background:rgba(24,22,19,.12);
+    animation:aparecer 240ms ease both;
+  }
+  @keyframes aparecer{from{opacity:0}}
+
+  .postit,.ficha{
+    outline:none;
+    position:fixed;
+    z-index:60;
+    left:50%;
+    top:50%;
+    max-height:80vh;
+    overflow:auto;
+    box-sizing:border-box;
+  }
+
+  .postit{
+    width:min(78vw, 310px);
+    transform:translate(-50%,-50%) rotate(-2.4deg);
+    background:var(--postit);
+    color:var(--postit-ink);
+    padding:26px 24px 22px;
+    box-shadow:0 22px 44px -20px rgba(0,0,0,.45), 0 2px 5px rgba(0,0,0,.07);
+    font-family:var(--serif);
+    font-weight:300;
+    font-size:15px;
+    line-height:1.55;
+    animation:pegar 420ms cubic-bezier(.2,.9,.3,1.15) both;
+  }
+  .postit::before{                      /* la franja de pegamento */
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:30px;
+    background:linear-gradient(rgba(0,0,0,.05), rgba(0,0,0,0));
+    pointer-events:none;
+  }
+  @keyframes pegar{
+    from{opacity:0; transform:translate(-50%,-50%) rotate(-8deg) scale(.88)}
+  }
+  .postit p{margin:0}
+  .postit p + p{margin-top:.7em}
+  .postit .cita{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--postit-tenue);
+    margin-top:1.2em;
+  }
+
+  .ficha{
+    width:min(80vw, 300px);
+    transform:translate(-50%,-50%) rotate(-.7deg);
+    background:var(--page);
+    border:1px solid var(--line);
+    padding:22px;
+    box-shadow:0 22px 44px -22px rgba(0,0,0,.4);
+    animation:aparecer 240ms ease both;
+  }
+  .ficha .rotulo{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .ficha .obra{
+    font-family:var(--serif);
+    font-weight:300;
+    font-size:20px;
+    line-height:1.15;
+    margin:.5em 0 1.1em;
+    color:var(--ink);
+  }
+  .ficha .formato{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1em;
+    width:100%;
+    padding:.75em 0;
+    border:0;
+    border-top:1px solid var(--rule);
+    background:none;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink);
+    cursor:pointer;
+    transition:color 220ms ease;
+  }
+  .ficha .formato:last-of-type{border-bottom:1px solid var(--rule)}
+  .ficha .formato:hover{color:var(--tierra)}
+  .ficha .peso{color:var(--muted); letter-spacing:.06em}
+  .ficha .estado{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.1em;
+    color:var(--muted);
+    margin-top:1em;
+    min-height:1.2em;
+  }
+
+  .cerrar{
+    position:absolute;
+    top:6px;
+    right:8px;
+    width:26px;
+    height:26px;
+    border:0;
+    background:none;
+    color:inherit;
+    opacity:.45;
+    font:16px/1 var(--mono);
+    cursor:pointer;
+  }
+  .cerrar:hover{opacity:1}
+  .cerrar:focus-visible{outline:1px solid var(--focus); outline-offset:2px}
+
+  @media (prefers-reduced-motion: reduce){
+    .postit,.ficha,.velo{animation:none}
+  }
+
+  @media (min-width:720px){
+    .app{padding-inline:32px}
+    .top{padding-block:24px 12px}
+    .bar{padding-block:16px 28px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <linearGradient id="shadeG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity=".12"/>
+      <stop offset=".22" stop-color="#000" stop-opacity=".035"/>
+      <stop offset=".55" stop-color="#000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="top">
+    <span class="mark">Carpeta</span>
+    <span class="meta" id="label">Tapa</span>
+  </header>
+
+  <main class="stage" id="stage" tabindex="0" role="group" aria-label="Carpeta: pasar de página">
+    <div class="clip" id="clip">
+      <div class="book" id="book"></div>
+    </div>
+  </main>
+
+  <footer class="bar">
+    <p class="hint" id="hint">Clic para abrir</p>
+    <div class="ctrl">
+      <button class="nav" id="prev" type="button" aria-label="Página anterior">
+        <svg viewBox="0 0 24 24"><path d="M15 5 8 12l7 7"/></svg>
+      </button>
+      <span class="count" id="count" aria-live="polite">01 / 05</span>
+      <button class="nav" id="next" type="button" aria-label="Página siguiente">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </footer>
+</div>
+
+<div class="velo" id="velo" hidden></div>
+
+<div class="postit" id="postit" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Extracto">
+  <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+  <div id="postitCuerpo"></div>
+</div>
+
+<div class="ficha" id="ficha" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Descargar">
+  <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+  <p class="rotulo">Descargar gratis</p>
+  <p class="obra" id="fichaObra"></p>
+  <div id="fichaFormatos"></div>
+  <p class="estado" id="fichaEstado"></p>
+</div>
+
+<!-- ============================================================
+     CONTENIDO DE LAS PÁGINAS — editable como HTML común.
+     Cada bloque entra en la cara indicada en data-slot.
+     ============================================================ -->
+<div id="contenido" hidden>
+
+  <!-- TAPA -->
+  <div data-title="Tapa">
+    <p class="eyebrow"><span>Portfolio</span></p>
+    <h1 class="cover-title">Lucas<br>Videla</h1>
+    <p class="cover-sub">Escritura y formas de la memoria</p>
+    <p class="cover-foot">Buenos Aires</p>
+  </div>
+
+  <!-- GUARDA · queda en blanco, como la guarda de un libro.
+       Sostiene la paginación: por ella las carátulas caen siempre a la izquierda. -->
+  <div data-title="Guarda"></div>
+
+  <!-- ÍNDICE -->
+  <div data-title="Índice" data-id="indice">
+    <p class="eyebrow"><span>Índice</span></p>
+    <div class="indice">
+      <button type="button" class="row" data-ir="libros"><span class="n">02</span><span>Libros</span></button>
+      <button type="button" class="row" data-ir="diario"><span class="n">03</span><span>Diario · Fragmentos</span></button>
+      <button type="button" class="row" data-ir="obra"><span class="n">04</span><span>Obra visual · Escultura</span></button>
+      <button type="button" class="row" data-ir="arqueologia"><span class="n">05</span><span>Arqueología de cada uno</span></button>
+      <button type="button" class="row" data-ir="sobre"><span class="n">06</span><span>Sobre mí</span></button>
+      <button type="button" class="row" data-ir="contacto"><span class="n">07</span><span>Contacto</span></button>
+    </div>
+  </div>
+
+  <!-- CARÁTULA · LIBROS -->
+  <div data-title="Libros" data-id="libros">
+    <div class="caratula">
+      <span class="c-num">02</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Libros</h2>
+    </div>
+  </div>
+
+  <!-- 02 · LIBROS · 1 de 4 -->
+  <div data-title="Libros">
+    <p class="eyebrow"><span class="num">02</span><span>Libros</span></p>
+      <article class="libro solo">
+        <div class="tapa-libro"><img src="tapas/clemencia.jpg" alt="Tapa de Clemencia"></div>
+        <div>
+          <h3>Clemencia</h3>
+          <p class="contratapa">Un chico de once años anota lo que ve: la bandera al amanecer en el colegio, los poemas que su padre guarda en la mesa de luz, una tarde en el zoológico. En la casa está Clemencia, que le lee la enciclopedia de animales y cuida sus plantas en la terraza.</p>
+          <div class="acciones">
+            <button type="button" class="accion" data-descargar>Descargar gratis</button>
+            <ul class="formatos" hidden>
+        <li data-archivo="libros/clemencia.epub" data-ext=".epub" data-peso="1,1 MB">EPUB</li>
+            </ul>
+            <button type="button" class="accion" data-extracto>Leer un extracto</button>
+            <div class="extracto" hidden>
+              <p>Al amanecer los robles parecen un decorado; es lo primero que miro cuando subo la persiana. Después, tengo que ir al colegio. Para darme ánimo, mientras me visto, Clemencia me lee la enciclopedia de animales.</p>
+              <p class="cita">Clemencia · I</p>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+
+  <!-- 02 · LIBROS · 2 de 4 -->
+  <div data-title="Libros">
+    <p class="eyebrow"><span class="num">02</span><span>Libros</span></p>
+      <article class="libro solo">
+        <div class="tapa-libro"><img src="tapas/el-gran-canal.jpg" alt="Tapa de El gran canal"></div>
+        <div>
+          <h3>El gran canal</h3>
+          <p class="contratapa">Dos chicos se conocen junto al río, hijos de administradores de estancias vecinas. Años después, uno encuentra los cuadernos que anotó entre los veinte y los treinta y se pone a reescribirlos para poder volver. Quedan los galpones iluminados de noche y una liebre inmóvil antes de la tormenta.</p>
+          <div class="acciones">
+            <button type="button" class="accion" data-descargar>Descargar gratis</button>
+            <ul class="formatos" hidden>
+        <li data-archivo="libros/el-gran-canal.epub" data-ext=".epub" data-peso="2,7 MB">EPUB</li>
+        <li data-archivo="libros/el-gran-canal.pdf" data-ext=".pdf" data-peso="0,8 MB">PDF</li>
+            </ul>
+            <button type="button" class="accion" data-extracto>Leer un extracto</button>
+            <div class="extracto" hidden>
+              <p>Ese día, sobre el fin de un calor agobiante, salí a pasear con mi perra. Parecía que iba a llover, pero el agua no cayó hasta la madrugada. Después, al despertar, abrí las ventanas. El viento era fresco, los árboles se movían, los pájaros cantaban y era feliz, tanto como alguien venido de la antigua Grecia.</p>
+              <p class="cita">El gran canal · Galpones</p>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+
+  <!-- 02 · LIBROS · 3 de 4 -->
+  <div data-title="Libros">
+    <p class="eyebrow"><span class="num">02</span><span>Libros</span></p>
+      <article class="libro solo">
+        <div class="tapa-libro"><img src="tapas/erotica-armeria.jpg" alt="Tapa de Erótica armería"></div>
+        <div>
+          <h3>Erótica armería</h3>
+          <p class="contratapa">Un verano en la costa, escrito como quien le habla a alguien que estuvo ahí. Empieza el día en que el narrador cumple trece años, en un bar lleno de mandíbulas de tiburones secándose al sol, y sigue por la playa, los médanos y la escollera.</p>
+          <div class="acciones">
+            <button type="button" class="accion" data-descargar>Descargar gratis</button>
+            <ul class="formatos" hidden>
+        <li data-archivo="libros/erotica-armeria.epub" data-ext=".epub" data-peso="0,8 MB">EPUB</li>
+        <li data-archivo="libros/erotica-armeria.pdf" data-ext=".pdf" data-peso="0,4 MB">PDF</li>
+            </ul>
+            <button type="button" class="accion" data-extracto>Leer un extracto</button>
+            <div class="extracto" hidden>
+              <p>El día que cumplí los trece años nos encontramos, muy cerca de la casa, en un bar lleno de mandíbulas de tiburones secándose al sol.</p>
+              <p class="cita">Erótica armería · Bajo el sol</p>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+
+  <!-- 02 · LIBROS · 4 de 4 -->
+  <div data-title="Libros">
+    <p class="eyebrow"><span class="num">02</span><span>Libros</span></p>
+      <article class="libro solo">
+        <div class="tapa-libro"><img src="tapas/la-baguala.jpg" alt="Tapa de La baguala"></div>
+        <div>
+          <h3>La baguala</h3>
+          <p class="contratapa">El campo de un abuelo: la pileta celeste, los bonsáis en la galería, las chicharras que cantan más fuerte a medida que sube el sol. Un chico pasa los días con Flor y con Manuel, entre caballos, tormentas y salidas nocturnas que es mejor no contar en casa.</p>
+          <div class="acciones">
+            <button type="button" class="accion" data-descargar>Descargar gratis</button>
+            <ul class="formatos" hidden>
+        <li data-archivo="libros/la-baguala.epub" data-ext=".epub" data-peso="1,5 MB">EPUB</li>
+        <li data-archivo="libros/la-baguala.pdf" data-ext=".pdf" data-peso="0,9 MB">PDF</li>
+            </ul>
+            <button type="button" class="accion" data-extracto>Leer un extracto</button>
+            <div class="extracto" hidden>
+              <p>El día de sol. El campo quieto y precioso. Arriba, un cielo cubierto de nubes medianas y de otras más pequeñas. Todas pasan sobre hondonadas llenas de árboles y plantas que tienen formas extrañas.</p>
+              <p class="cita">La baguala · Gallinero</p>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+
+  <!-- CARÁTULA · DIARIO -->
+  <div data-title="Diario" data-id="diario">
+    <div class="caratula">
+      <span class="c-num">03</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Diario</h2>
+    </div>
+  </div>
+
+  <!-- 03 · DIARIO · portadilla -->
+  <div data-title="Diario">
+    <p class="eyebrow"><span class="num">03</span><span>Diario · Fragmentos</span></p>
+    <h2 class="p-title">Una mirada atenta sobre escenas mínimas</h2>
+    <p class="p-intro">Realización — selección de textos, <span class="nw">2011–2026</span>.</p>
+    <div class="indice">
+      <button type="button" class="row" data-ir="texto-1"><span class="n">2011</span><span>El artista hoy pinta</span></button>
+      <button type="button" class="row" data-ir="texto-2"><span class="n">2012</span><span>La historia de la creación es el resultado del arte</span></button>
+      <button type="button" class="row" data-ir="texto-3"><span class="n">2016</span><span>Visible y floreciente</span></button>
+      <button type="button" class="row" data-ir="texto-4"><span class="n">2020</span><span>En Eze, más allá de N</span></button>
+      <button type="button" class="row" data-ir="texto-5"><span class="n">2025</span><span>Fragmento de una novela</span></button>
+      <button type="button" class="row" data-ir="texto-6"><span class="n">2026</span><span>Realización</span></button>
+      <button type="button" class="row" data-ir="texto-7"><span class="n">2026</span><span>Cuatro</span></button>
+      <button type="button" class="row" data-ir="texto-8"><span class="n">2026</span><span>Ningún peso en los pies</span></button>
+    </div>
+  </div>
+
+  <!-- DIARIO · 1 -->
+  <div data-title="El artista hoy pinta" data-id="texto-1">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">El artista hoy pinta</h2>
+    <p class="t-fecha">10 de octubre de 2011</p>
+    <div class="texto verso">
+      <p><span class="v">Hoy pinté unos caballos hermosos como nunca antes,</span><span class="v">detrás de ellos, unos pinos y un fondo azul estrellado;</span><span class="v">cuando terminé me puse a mirarlos; no lo podía creer:</span><span class="v">iban a trotar para algún lado; tan feliz estaba.</span><span class="v">Hasta que tomé conciencia de los defectos,</span><span class="v">los problemas de representación, la falsedad</span><span class="v">de ciertas proporciones y los desaciertos.</span><span class="v">Borré todo y, en busca del primer instante deslumbrante,</span><span class="v">inhalé suave.</span></p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 2 -->
+  <div data-title="La historia de la creación" data-id="texto-2">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">La historia de la creación es el resultado del arte</h2>
+    <p class="t-fecha">5 de diciembre de 2012</p>
+    <div class="texto">
+      <p>Vamos otra vez: el Ser se hizo de la nada y apareció así, en medio de una noche glacial, y dijo cosas que nadie entendió y que por eso no quedaron registradas en ningún lado. Luego se desnudó y, mientras corría por el hielo, trazó imágenes tan hermosas que unos espectadores, conmovidos, fueron a buscar rosas y claveles para arrojarle. A los costados, se atisbaron ninfas. Todo esto lo registró mucho tiempo después un artista que le añadió una infinidad de detalles, ahora repartidos por el cielo y por cada rincón del mural: objeto, alguna vez, de innumerables ponderaciones, que hoy yace en el fondo del inmenso y estruendoso océano.</p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 3 -->
+  <div data-title="Visible y floreciente" data-id="texto-3">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">Visible y floreciente</h2>
+    <p class="t-fecha">28 de agosto de 2016</p>
+    <div class="texto verso">
+      <p><span class="v">Hoy al mediodía, bajo la lluvia,</span><span class="v">mientras caminaba por la vereda para ir a buscar a mi hija,</span><span class="v">ante la visión de una persona sin piernas,</span><span class="v">sentí que de ese lado de la calle, a mi alcance,</span><span class="v">estaban los motivos para darle un sentido profundo</span><span class="v">a esa tragedia hasta dejarla reducida a un acto redentor.</span><span class="v">Al mismo tiempo, presentí que enfrente,</span><span class="v">sobre la otra vereda, había un mundo azaroso y absurdo</span><span class="v">que no lograba ninguna quietud.</span><span class="v">Y en el asfalto, fui capaz de no tomar una elección específica.</span><span class="v">Pude dejar que las cosas siguieran más allá de mis creencias.</span></p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 4 -->
+  <div data-title="En Eze, más allá de N" data-id="texto-4">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">En Eze, más allá de N</h2>
+    <p class="t-fecha">8 de enero de 2020</p>
+    <div class="texto">
+      <p>Una grieta con un filo inmenso en una montaña de donde salen gaviotas que de a poco van siendo cada vez más doradas, hasta que su ímpetu se nos contagia y lo que antes era un gris opaco se vuelve querido. Así el mundo empieza a tener una forma redonda y a la vez con tonos marinos, verde en ciertos puntos y del color de la tierra del buen desierto en otros. Los perros se vuelven mudos, el pasto crece, la gente a nuestro lado tiene una bonhomía inusual, y lo que antes era un problema —el canto del gallo en la mitad de la noche— deja de serlo.</p>
+      <p>Los que se han arrogado el don de proclamarse maestros —y yo obedientemente he seguido— estaban equivocados. Sus formas categóricas no alcanzan ni alcanzarán nunca a explicar el vuelo de las gaviotas desde el filo de esa montaña hacia el mar quieto.</p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 5 -->
+  <div data-title="Fragmento de una novela" data-id="texto-5">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">Fragmento de una novela</h2>
+    <p class="t-fecha">16 de abril de 2025</p>
+    <div class="texto">
+      <p>Descubro un cuaderno que tiene la siguiente anotación subrayada: “Proyecto para una novela”. Más abajo, dice: “Empezaba a darse cuenta de que lo importante era huir de la historia y mantenerse en caminos —casi senderos—, que uno puede transitar con cierta lentitud. ¿Y para qué estaban los grandes proyectos? Para absorber a quienes se desvían de esos senderos. No, él caminaría por ellos, encontraría la paz y tal vez, por un instante —en una pradera recién florecida, un día de sol y viento, arriba de una hondonada, atento a unos pinos a lo lejos— se sorprendería con el vuelo cercano de un pájaro. ¿Llegaría a posarse incluso en su hombro ese pájaro?”.</p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 6 -->
+  <div data-title="Realización" data-id="texto-6">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">Realización</h2>
+    <p class="t-fecha">2 de mayo de 2026</p>
+    <div class="texto">
+      <p>Cinco y cuarenta y ocho de la mañana. Dormí mal por el dolor de estómago, pero lo más claro es el sentimiento de angustia por la cantidad de juicios. Durante años, luché para tener muchos clientes. Ahora son mi éxito y mi condena.</p>
+      <p>Ya cerca de las seis de la mañana, veo que el cielo se vuelve celeste y el sol todavía no asoma cerca de un edificio que dice “IBM” en grandes letras luminosas. Un avión pasa. Su estruendo lejano me sosiega. Quisiera que la escritura me trajera la misma calma. Un invierno, se me apareció esa idea en París, en una bañera; estaba en el piso más alto de un edificio antiguo, por la ventana se veía la torre Eiffel. Su figura se reflejaba en el agua caliente y de pronto apareció ese pensamiento: la realización sería mi condena.</p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 7 -->
+  <div data-title="Cuatro" data-id="texto-7">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">Cuatro</h2>
+    <p class="t-fecha">27 de agosto de 2026</p>
+    <div class="texto verso">
+      <p><span class="v">Atadas con una cinta negra</span><span class="v">cuatro rosas de un rojo que tiene</span><span class="v">algo de blanco y de naranja también,</span><span class="v">pero muy tenue, apenas insinuado</span><span class="v">en el furioso rojo que predomina.</span></p>
+    </div>
+  </div>
+
+  <!-- DIARIO · 8 -->
+  <div data-title="Ningún peso en los pies" data-id="texto-8">
+    <p class="eyebrow"><span class="num">03</span><span>Diario</span></p>
+    <h2 class="t-title">Ningún peso en los pies</h2>
+    <p class="t-fecha">31 de agosto de 2026</p>
+    <div class="texto">
+      <p>Once y cuarto de la noche. Perdió uno a cero nuestro equipo una vez más. Mi hijo de veinte años me dijo: «No puedo creer que mañana tenga que ir temprano a la facultad.» A su lado, en el sillón, tenía la mirada fija en las caras de preocupación de algunos jugadores de nuestro equipo que caminaban hacia el vestuario. Se me ocurrió pensar: «Hasta hace poco era un niño».</p>
+      <p>Lo vi entonces a mi hijo a la salida del colegio, caminando hacia mí sin ningún tipo de peso en sus pies, con la mochila inmensa para su cuerpo que ni siquiera parecía molestarlo, y el pantalón gris que a mí, de chico, me picaba y que él usaba hasta la noche. Nada impedía que a cada paso pareciera que él danzase, apenas contoneándose, o más bien desplegando una gracia propia de esos años.</p>
+    </div>
+  </div>
+
+  <!-- CARÁTULA · OBRA VISUAL -->
+  <div data-title="Obra visual" data-id="obra">
+    <div class="caratula">
+      <span class="c-num">04</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Obra visual</h2>
+    </div>
+  </div>
+
+  <!-- 04 · OBRA VISUAL -->
+  <div data-title="Obra visual">
+    <p class="eyebrow"><span class="num">04</span><span>Obra visual · Escultura</span></p>
+    <h2 class="p-title">Una prolongación material de ese mismo mundo</h2>
+    <p class="p-intro">Organizada por series o familias.</p>
+
+    <p class="serie">Formas orgánicas</p>
+    <div class="grid3">
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Bronce · 2021</figcaption></figure>
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Piedra · 2020</figcaption></figure>
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Cerámica · 2022</figcaption></figure>
+    </div>
+
+    <p class="serie">Cavidades · Restos</p>
+    <div class="grid3">
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
+      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
+    </div>
+
+    <p class="serie">Pinturas y estudios</p>
+    <div class="grid3">
+      <figure><div class="ph">Pintura</div><figcaption class="pie"><b>Título s/t</b><br>Óleo sobre tela</figcaption></figure>
+      <figure><div class="ph">Estudio</div><figcaption class="pie"><b>Título s/t</b><br>Técnica mixta</figcaption></figure>
+      <figure><div class="ph">Dibujo</div><figcaption class="pie"><b>Título s/t</b><br>Tinta sobre papel</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- CARÁTULA · ARQUEOLOGÍA DE CADA UNO -->
+  <div data-title="Arqueología" data-id="arqueologia">
+    <div class="caratula">
+      <span class="c-num">05</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Arqueología de cada uno</h2>
+    </div>
+  </div>
+
+  <!-- 05 · ARQUEOLOGÍA DE CADA UNO -->
+  <div data-title="Arqueología">
+    <p class="eyebrow"><span class="num">05</span><span>Proyecto especial</span></p>
+    <h2 class="p-title">Arqueología de cada uno</h2>
+    <p class="p-intro">Una investigación sobre memoria, objetos, infancia, restos y formas que permanecen: donde escritura, escultura, fotografía y archivo se unen.</p>
+    <div class="grid4">
+      <div class="ph">Piedra</div>
+      <div class="ph">Objeto</div>
+      <div class="ph">Fotografía</div>
+      <div class="ph">Dibujo</div>
+      <div class="ph">Escultura pequeña</div>
+      <div class="ph">Fotografía</div>
+      <div class="ph">Objeto</div>
+      <div class="ph">Resto</div>
+    </div>
+    <p class="nota">Un texto breve puede acompañar el conjunto, sin explicarlo. La imagen tiene protagonismo.</p>
+  </div>
+
+  <!-- CARÁTULA · SOBRE MÍ -->
+  <div data-title="Sobre mí" data-id="sobre">
+    <div class="caratula">
+      <span class="c-num">06</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Sobre mí</h2>
+    </div>
+  </div>
+
+  <!-- 06 · SOBRE MÍ -->
+  <div data-title="Sobre mí">
+    <p class="eyebrow"><span class="num">06</span><span>Sobre mí</span></p>
+    <h2 class="p-title">Sobre mí</h2>
+    <div class="bio">
+      <p>Lucas Videla nació en Buenos Aires en 1973. Es abogado, escritor y desarrolla una obra visual centrada en formas orgánicas, cavidades, restos y objetos vinculados a una arqueología personal.</p>
+      <p>Su escritura parte de escenas cotidianas, memorias familiares, viajes, observaciones íntimas y experiencias del cuerpo y del tiempo.</p>
+    </div>
+  </div>
+
+  <!-- CARÁTULA · CONTACTO -->
+  <div data-title="Contacto" data-id="contacto">
+    <div class="caratula">
+      <span class="c-num">07</span>
+      <div class="c-rule"></div>
+      <h2 class="c-title">Contacto</h2>
+    </div>
+  </div>
+
+  <!-- 07 · CONTACTO -->
+  <div data-title="Contacto">
+    <p class="eyebrow"><span class="num">07</span><span>Contacto</span></p>
+    <h2 class="p-title">Para escribir, leer o ver la obra.</h2>
+    <div class="links" style="flex-direction:column; gap:.9em; margin-top:1.6em; align-items:flex-start">
+      <a href="mailto:correo@ejemplo.com">correo@ejemplo.com</a>
+      <a href="#">Instagram</a>
+      <a href="#">Libros</a>
+    </div>
+  </div>
+
+  <!-- CONTRATAPA -->
+  <div data-title="Colofón">
+    <p class="colofon">© Lucas Videla · Buenos Aires</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  /* la carpeta se arma sola a partir de los bloques de #contenido:
+     el primero es la tapa, el último la contratapa, el resto son páginas. */
+  var fuente  = document.getElementById('contenido');
+  var bloques = fuente ? Array.prototype.slice.call(fuente.children) : [];
+  var contra  = bloques.length ? bloques[bloques.length - 1] : null;
+
+  /* una entrada por cara; null = página en blanco.
+     Toda carátula (un bloque que contiene .caratula) se corre a página
+     izquierda, así cada capítulo abre enfrentado a su primera página. */
+  var paginas = [];
+  bloques.slice(0, -1).forEach(function(b){
+    if (b.querySelector('.caratula') && paginas.length % 2 === 0) paginas.push(null);
+    paginas.push(b);
+  });
+
+  var N    = Math.max(2, Math.ceil(paginas.length / 2));   // hojas, contando la tapa
+  var MAXP = N * 2;               // última cara: interior de contratapa
+  var RATIO = 0.7353;
+
+  var book  = document.getElementById('book');
+  var clip  = document.getElementById('clip');
+  var stage = document.getElementById('stage');
+  var label = document.getElementById('label');
+  var count = document.getElementById('count');
+  var hint  = document.getElementById('hint');
+  var prevB = document.getElementById('prev');
+  var nextB = document.getElementById('next');
+
+  var names = [];
+  for (var f = 0; f < MAXP; f++) names.push(paginas[f] ? (paginas[f].getAttribute('data-title') || '') : '—');
+  names[MAXP] = contra ? (contra.getAttribute('data-title') || 'Contratapa') : 'Contratapa';
+  var desktopSteps = [0];
+  for (var s = 1; s <= MAXP - 1; s += 2) desktopSteps.push(s);   // 0,1,3,5,7
+
+  var p = 0;
+  var kPrev = 0;
+  var zTop = N + 1;
+  var mq = window.matchMedia('(min-width: 720px)');
+  var wide = mq.matches;
+
+  /* ---------- construcción ---------- */
+  var D = 'M 24 6 H 936 a 8 8 0 0 1 8 8 V 26 a 8 8 0 0 0 8 8 H 1036 a 24 24 0 0 1 24 24 V 542 ' +
+          'L 1000 622 V 1330 a 24 24 0 0 1 -24 24 H 24 a 24 24 0 0 1 -24 -24 V 30 a 24 24 0 0 1 24 -24 Z';
+
+  var RECT = '<rect x="56" y="64" width="888" height="1232" rx="5"';
+
+  /* kind: 'carpeta' = la estructura exterior con pestaña; 'hoja' = sólo el rectángulo interior */
+  function faceSVG(kind, side){
+    var m = side === 'l' ? ' transform="translate(1064,0) scale(-1,1)"' : '';
+    var art = kind === 'carpeta'
+      ? '<path class="body" d="' + D + '"/>' + RECT + ' class="frame"/>'
+      : RECT + ' class="hoja"/>';
+    var shade = kind === 'carpeta'
+      ? '<path d="' + D + '" fill="url(#shadeG)" stroke="none"/>'
+      : RECT + ' fill="url(#shadeG)" stroke="none"/>';
+    return '<svg class="sheet" viewBox="0 0 1064 1360" aria-hidden="true"><g' + m + '>' + art + '</g></svg>' +
+           '<svg class="sheet shade" viewBox="0 0 1064 1360" aria-hidden="true"><g' + m + '>' + shade + '</g></svg>';
+  }
+  function face(cls, side, kind, slotId){
+    return '<div class="face ' + cls + ' ' + side + '">' +
+             '<div class="inner">' + faceSVG(kind, side) +
+               '<div class="slot" id="' + slotId + '"></div>' +
+             '</div>' +
+           '</div>';
+  }
+
+  /* panel de atrás: fijo, nunca se mueve */
+  var html = '<div class="base">' + face('front','r','carpeta','slot-contratapa') + '</div>';
+  /* leaf 0 = tapa (gira sólo al abrir/cerrar) · leaves 1..3 = hojas (gira sólo el rectángulo) */
+  for (var i = 0; i < N; i++){
+    var kind = i === 0 ? 'carpeta' : 'hoja';
+    html += '<div class="leaf" data-i="' + i + '">' +
+              face('front','r',kind,'slot-' + (i*2)) +
+              face('back','l',kind,'slot-' + (i*2 + 1)) +
+            '</div>';
+  }
+  book.innerHTML = html;
+  /* cada bloque entra en la cara que le toca, en orden de lectura */
+  var destinos = {};
+  function mudar(bloque, destino, cara){
+    if (!bloque || !destino) return;
+    while (bloque.firstChild) destino.appendChild(bloque.firstChild);
+    var id = bloque.getAttribute('data-id');
+    if (id) destinos[id] = cara;
+  }
+  paginas.forEach(function(b, j){ mudar(b, document.getElementById('slot-' + j), j); });
+  mudar(contra, document.getElementById('slot-contratapa'), MAXP);
+
+  var leaves = Array.prototype.slice.call(book.querySelectorAll('.leaf'));
+  leaves.forEach(function(l, i){ l.style.zIndex = String(N - i); });
+
+  /* ---------- medidas ---------- */
+  function layout(){
+    var r = stage.getBoundingClientRect();
+    var units = (wide ? 2 : 1) + 0.128 + 0.03;     // hojas + pestañas + margen de lomo
+    var pw = (r.width * 0.96) / units;
+    var ph = pw / RATIO;
+    var maxH = r.height * 0.97;
+    if (ph > maxH){ ph = maxH; pw = ph * RATIO; }
+    if (ph > 860){ ph = 860; pw = ph * RATIO; }
+    book.style.setProperty('--pw', pw + 'px');
+    book.style.setProperty('--ph', ph + 'px');
+    /* ventana: en celular recorta para que se vea una sola hoja */
+    clip.style.width  = Math.min(pw * (wide ? 2.2 : 1.10), r.width) + 'px';
+    clip.style.height = Math.min(ph * 1.08, r.height) + 'px';
+    encajar();
+  }
+
+  /* ---------- que ninguna página desborde ----------
+     Si el visor impone un tamaño mínimo de fuente, hace zoom o cae a otra
+     serif, el texto puede no entrar: cada hoja ajusta su propia escala. */
+  var caras_ = null;
+  function encajar(){
+    caras_ = caras_ || document.querySelectorAll('.slot');
+    caras_.forEach(function(s){
+      s.style.removeProperty('--ajuste');
+      s.classList.remove('compacta');
+      s.classList.remove('apretada');
+    });
+    caras_.forEach(function(s){
+      function desborda(){ return s.scrollHeight > s.clientHeight + 1; }
+      if (!desborda()) return;
+      var intento = 0, escala = 1;
+      while (desborda() && intento++ < 3 && escala > 0.86){          /* 1. achicar un poco el cuerpo */
+        escala = Math.max(0.86, escala * Math.max(0.9, (s.clientHeight / s.scrollHeight) * 0.99));
+        s.style.setProperty('--ajuste', escala.toFixed(3));
+      }
+      if (desborda()) s.classList.add('compacta');                   /* 2. ganar margen */
+      if (desborda()) s.classList.add('apretada');                   /* 3. dejar desplazar */
+    });
+  }
+
+  /* ---------- estado ---------- */
+  function flippedCount(){ return Math.ceil(p / 2); }
+
+  function render(animate){
+    var k = flippedCount();
+
+    var orden = [];
+    for (var q = 0; q < leaves.length; q++) orden.push(q);
+    if (k < kPrev) orden.reverse();      /* al volver, la hoja más baja queda arriba */
+
+    orden.forEach(function(i){
+      var leaf = leaves[i];
+      var should = i < k;
+      var is = leaf.classList.contains('flipped');
+      if (should !== is){
+        leaf.classList.toggle('flipped', should);
+        leaf.style.zIndex = String(++zTop);
+        if (animate){
+          leaf.classList.remove('moving');
+          void leaf.offsetWidth;
+          leaf.classList.add('moving');
+        }
+      }
+    });
+    kPrev = k;
+
+    var tx = wide ? (k === 0 ? -25 : 0) : (p % 2 === 0 ? -28.25 : 28.25);
+    book.style.setProperty('--tx', tx + '%');
+    book.style.setProperty('--po', (50 - tx) + '%');
+
+    if (wide){
+      var partes = [names[p], names[p + 1]].filter(function(x){ return x && x !== '—'; });
+      if (partes[0] === partes[1]) partes.pop();
+      label.textContent = p === 0 ? names[0] : partes.join(' · ');
+      var idx = desktopSteps.indexOf(p);
+      count.textContent = pad(idx + 1) + ' / ' + pad(desktopSteps.length);
+    } else {
+      label.textContent = names[p];
+      count.textContent = pad(p + 1) + ' / ' + pad(MAXP + 1);
+    }
+
+    hint.dataset.off = p === 0 ? '0' : '1';
+    prevB.disabled = p === 0;
+    nextB.disabled = wide ? (p >= desktopSteps[desktopSteps.length - 1]) : (p >= MAXP);
+  }
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  /* ir directo a una sección o a un texto desde los índices */
+  function irA(id){
+    var f = destinos[id];
+    if (f == null) return;
+    var np = wide ? (f <= 1 ? f : (f % 2 ? f : f - 1)) : f;
+    if (np === p) return;
+    p = np;
+    render(true);
+  }
+
+  function go(dir){
+    var np = p;
+    if (wide){
+      var idx = desktopSteps.indexOf(p);
+      if (idx === -1) idx = 0;
+      idx = Math.min(Math.max(idx + dir, 0), desktopSteps.length - 1);
+      np = desktopSteps[idx];
+    } else {
+      np = Math.min(Math.max(p + dir, 0), MAXP);
+    }
+    if (np === p) return;
+    p = np;
+    render(true);
+  }
+
+  /* ---------- interacción ---------- */
+  stage.addEventListener('click', function(e){
+    var salto = e.target.closest && e.target.closest('[data-ir]');
+    if (salto) return irA(salto.getAttribute('data-ir'));
+    var extracto = e.target.closest && e.target.closest('[data-extracto]');
+    if (extracto) return verExtracto(extracto);
+    var descarga = e.target.closest && e.target.closest('[data-descargar]');
+    if (descarga) return verDescarga(descarga);
+    if (e.target.closest && e.target.closest('a, button')) return;   /* enlaces y botones de las páginas no pasan de hoja */
+    if (p === 0) return go(1);
+    var mid = stage.getBoundingClientRect().left + stage.getBoundingClientRect().width / 2;
+    go(e.clientX < mid ? -1 : 1);
+  });
+
+  stage.addEventListener('keydown', function(e){
+    var enControl = e.target.closest && e.target.closest('button, a');
+    if (enControl && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); go(-1); }
+  });
+  window.addEventListener('keydown', function(e){
+    if (document.activeElement === stage) return;
+    if (e.key === 'ArrowRight') go(1);
+    if (e.key === 'ArrowLeft') go(-1);
+  });
+
+  prevB.addEventListener('click', function(){ go(-1); });
+  nextB.addEventListener('click', function(){ go(1); });
+
+  var tx0 = null, ty0 = null;
+  stage.addEventListener('touchstart', function(e){
+    tx0 = e.changedTouches[0].clientX;
+    ty0 = e.changedTouches[0].clientY;
+  }, {passive:true});
+  stage.addEventListener('touchend', function(e){
+    if (tx0 === null) return;
+    var dx = e.changedTouches[0].clientX - tx0;
+    var dy = e.changedTouches[0].clientY - ty0;
+    tx0 = null;
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, {passive:true});
+
+  leaves.forEach(function(leaf){
+    leaf.addEventListener('transitionend', function(ev){
+      if (ev.propertyName === 'transform') leaf.classList.remove('moving');
+    });
+  });
+
+  function onBreakpoint(){
+    wide = mq.matches;
+    if (wide && p !== 0 && p % 2 === 0) p = Math.max(1, p - 1);
+    layout();
+    render(false);
+  }
+  if (mq.addEventListener) mq.addEventListener('change', onBreakpoint);
+  else mq.addListener(onBreakpoint);
+
+  if (window.ResizeObserver) new ResizeObserver(layout).observe(stage);
+  window.addEventListener('resize', layout);
+
+  /* ---------- papeles: extracto y descarga ---------- */
+  var velo    = document.getElementById('velo');
+  var postit  = document.getElementById('postit');
+  var pcuerpo = document.getElementById('postitCuerpo');
+  var ficha   = document.getElementById('ficha');
+  var fObra   = document.getElementById('fichaObra');
+  var fForm   = document.getElementById('fichaFormatos');
+  var fEstado = document.getElementById('fichaEstado');
+  var abierto = null;
+
+  function cerrarPapel(){
+    postit.hidden = true;
+    ficha.hidden = true;
+    velo.hidden = true;
+    if (abierto && abierto.focus) abierto.focus();
+    abierto = null;
+  }
+  function abrirPapel(el, disparador){
+    abierto = disparador || null;
+    velo.hidden = false;
+    el.hidden = false;
+    el.focus({preventScroll:true});
+  }
+
+  function verExtracto(boton){
+    var texto = boton.parentNode.querySelector('.extracto');
+    if (!texto) return;
+    pcuerpo.innerHTML = texto.innerHTML;
+    abrirPapel(postit, boton);
+  }
+
+  /* descarga directa: el archivo está al lado de esta página */
+  function bajar(opcion, nombre){
+    var archivo = opcion.getAttribute('data-archivo');
+    try{
+      var a = document.createElement('a');
+      a.href = archivo;
+      a.download = nombre;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){ a.remove(); }, 1000);   /* darle tiempo al navegador a tomar el nombre */
+      fEstado.textContent = 'Descarga iniciada.';
+    } catch (e){
+      fEstado.textContent = 'No se pudo iniciar la descarga.';
+    }
+  }
+
+  function nombreArchivo(titulo, opcion){
+    var archivo = opcion.getAttribute('data-archivo');
+    var ext = opcion.getAttribute('data-ext') || archivo.slice(archivo.lastIndexOf('.'));
+    return titulo + ' — Lucas Videla' + ext;
+  }
+
+  function verDescarga(boton){
+    var articulo = boton.closest('.libro');
+    var lista    = boton.parentNode.querySelector('.formatos');
+    var titulo   = articulo && articulo.querySelector('h3') ? articulo.querySelector('h3').textContent.trim() : 'Libro';
+    var opciones = lista ? Array.prototype.slice.call(lista.children) : [];
+    if (!opciones.length) return;
+
+    fObra.textContent = titulo;
+    fEstado.textContent = '';
+    fForm.innerHTML = '';
+    opciones.forEach(function(op){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'formato';
+      b.innerHTML = '<span>' + op.textContent.trim() + '</span><span class="peso">' + (op.getAttribute('data-peso') || '') + '</span>';
+      b.addEventListener('click', function(){ bajar(op, nombreArchivo(titulo, op)); });
+      fForm.appendChild(b);
+    });
+    abrirPapel(ficha, boton);
+
+    /* un solo formato: se baja derecho, sin preguntar */
+    if (opciones.length === 1) bajar(opciones[0], nombreArchivo(titulo, opciones[0]));
+  }
+
+  velo.addEventListener('click', cerrarPapel);
+  document.addEventListener('click', function(e){
+    if (e.target.closest && e.target.closest('[data-cerrar]')) cerrarPapel();
+  });
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && (!postit.hidden || !ficha.hidden)){ e.preventDefault(); cerrarPapel(); }
+  });
+
+  hint.textContent = window.matchMedia('(hover: hover)').matches ? 'Clic para abrir' : 'Tocá para abrir';
+
+  layout();
+  render(false);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(encajar);
+})();
+</script>
+</body>
+</html>
