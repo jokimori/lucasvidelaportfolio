@@ -267,6 +267,12 @@
     line-height:1.55;
     color:var(--ink);
   }
+  @media (max-width:719px){
+    .slot{--cuerpo:clamp(12px, calc(var(--pw, 300px) * .042), 17px)}
+  }
+  @media (min-width:720px){
+    .slot{--cuerpo:clamp(10px, calc(var(--pw, 300px) * .036), 23px)}
+  }
   .slot *{box-sizing:border-box}
   .slot.compacta{padding:2.6% 4%}
   .slot.apretada{overflow-y:auto; overflow-x:hidden; scrollbar-width:thin}
@@ -485,6 +491,35 @@
     background:var(--ground);
   }
   .slot .tapa-libro img{width:100%; height:100%; object-fit:cover; display:block}
+  .slot .tapa-libro{cursor:zoom-in}
+
+  /* visor de tapas: la imagen en grande, se cierra tocando afuera */
+  .visor{
+    position:fixed;
+    inset:0;
+    z-index:70;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:calc(env(safe-area-inset-top, 0px) + 48px) 16px calc(env(safe-area-inset-bottom, 0px) + 48px);
+    box-sizing:border-box;
+    background:rgba(18,17,15,.82);
+    cursor:zoom-out;
+    animation:aparecer 220ms ease both;
+  }
+  .visor img{
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    box-shadow:0 30px 60px -24px rgba(0,0,0,.6);
+    cursor:default;
+    animation:acercar 320ms var(--ease) both;
+  }
+  @keyframes acercar{from{opacity:0; transform:scale(.94)}}
+  .visor .cerrar{position:fixed; top:calc(env(safe-area-inset-top, 0px) + 12px); right:14px; color:#F3F1ED; opacity:.7; width:36px; height:36px; font-size:22px}
+  @media (prefers-reduced-motion: reduce){ .visor, .visor img{animation:none} }
   .slot .acciones{display:flex; flex-wrap:wrap; gap:1.1em; margin-top:.8em}
   .slot .accion{
     appearance:none;
@@ -635,8 +670,9 @@
 
   @media (min-width:720px){
     .app{padding-inline:32px}
-    .top{padding-block:24px 12px}
-    .bar{padding-block:16px 28px}
+    .top{padding-block:16px 4px}
+    .bar{position:relative; padding-block:22px 14px}
+    .hint{position:absolute; top:5px; left:50%; transform:translateX(-50%)}
   }
 </style>
 </head>
@@ -678,6 +714,11 @@
 </div>
 
 <div class="velo" id="velo" hidden></div>
+
+<div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Tapa ampliada" tabindex="-1">
+  <button type="button" class="cerrar" aria-label="Cerrar">&times;</button>
+  <img id="visorImg" alt="">
+</div>
 
 <div class="postit" id="postit" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Extracto">
   <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
@@ -1145,14 +1186,14 @@
     var units = (wide ? 2 : 1) + 0.128 + 0.03;     // hojas + pestañas + margen de lomo
     var pw = (r.width * 0.96) / units;
     var ph = pw / RATIO;
-    var maxH = r.height * 0.97;
+    var maxH = r.height * (wide ? 0.99 : 0.97);
     if (ph > maxH){ ph = maxH; pw = ph * RATIO; }
-    if (ph > 860){ ph = 860; pw = ph * RATIO; }
+    if (ph > 1180){ ph = 1180; pw = ph * RATIO; }
     book.style.setProperty('--pw', pw + 'px');
     book.style.setProperty('--ph', ph + 'px');
     /* ventana: en celular recorta para que se vea una sola hoja */
     clip.style.width  = Math.min(pw * (wide ? 2.2 : 1.10), r.width) + 'px';
-    clip.style.height = Math.min(ph * 1.08, r.height) + 'px';
+    clip.style.height = Math.min(ph * (wide ? 1.01 : 1.08), r.height) + 'px';
     encajar();
   }
 
@@ -1261,6 +1302,8 @@
     if (extracto) return verExtracto(extracto);
     var descarga = e.target.closest && e.target.closest('[data-descargar]');
     if (descarga) return verDescarga(descarga);
+    var tapa = e.target.closest && e.target.closest('.tapa-libro');
+    if (tapa) return verTapa(tapa);
     if (e.target.closest && e.target.closest('a, button')) return;   /* enlaces y botones de las páginas no pasan de hoja */
     if (p === 0) return go(1);
     var mid = stage.getBoundingClientRect().left + stage.getBoundingClientRect().width / 2;
@@ -1390,6 +1433,32 @@
     /* un solo formato: se baja derecho, sin preguntar */
     if (opciones.length === 1) bajar(opciones[0], nombreArchivo(titulo, opciones[0]));
   }
+
+  /* tapa en grande */
+  var visor = document.getElementById('visor');
+  var vImg  = document.getElementById('visorImg');
+  var tapaAbierta = null;
+  function verTapa(t){
+    var img = t.querySelector('img');
+    if (!img) return;
+    vImg.src = img.currentSrc || img.src;
+    vImg.alt = img.alt || '';
+    tapaAbierta = t;
+    visor.hidden = false;
+    visor.focus({preventScroll:true});
+  }
+  function cerrarTapa(){
+    visor.hidden = true;
+    vImg.removeAttribute('src');
+    tapaAbierta = null;
+  }
+  visor.addEventListener('click', function(e){
+    if (e.target === vImg) return;     /* tocar la imagen no cierra; tocar afuera, sí */
+    cerrarTapa();
+  });
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !visor.hidden){ e.preventDefault(); e.stopImmediatePropagation(); cerrarTapa(); }
+  }, true);
 
   velo.addEventListener('click', cerrarPapel);
   document.addEventListener('click', function(e){
