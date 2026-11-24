@@ -520,6 +520,26 @@
   @keyframes acercar{from{opacity:0; transform:scale(.94)}}
   .visor .cerrar{position:fixed; top:calc(env(safe-area-inset-top, 0px) + 12px); right:14px; color:#F3F1ED; opacity:.7; width:36px; height:36px; font-size:22px}
   @media (prefers-reduced-motion: reduce){ .visor, .visor img{animation:none} }
+  /* esculturas: una página por obra */
+  .slot .o-title{font-size:1.5em; margin-top:.6em}
+  .slot .obra{flex:1; min-height:0; display:flex; flex-direction:column; gap:.5em; margin-top:.8em}
+  .slot .foto{appearance:none; border:0; padding:0; margin:0; background:var(--ground); cursor:zoom-in; display:block; overflow:hidden}
+  .slot .foto img{display:block; width:100%; height:100%; object-fit:cover; transition:opacity 220ms ease}
+  .slot .foto:hover img{opacity:.88}
+  .slot .foto:focus-visible{outline:1px solid var(--focus); outline-offset:2px}
+  .slot .foto.principal{flex:1; min-height:0; background:#1E1E1F}
+  .slot .foto.principal img{object-fit:contain}
+  .slot .miniaturas{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5em; flex:0 0 auto}
+  .slot .miniaturas .foto{aspect-ratio:1/1}
+
+  /* visor: flechas para recorrer las fotos de una obra */
+  .visor .paso{position:fixed; top:50%; transform:translateY(-50%); width:44px; height:44px; border:0; border-radius:999px; background:rgba(0,0,0,.28); color:#F3F1ED; display:grid; place-items:center; cursor:pointer; opacity:.8}
+  .visor .paso:hover{opacity:1}
+  .visor .paso svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+  .visor .paso.ant{left:10px}
+  .visor .paso.sig{right:10px}
+  .visor .cuenta{position:fixed; bottom:calc(env(safe-area-inset-bottom, 0px) + 16px); left:50%; transform:translateX(-50%); color:#F3F1ED; opacity:.7; font:11px/1 var(--mono); letter-spacing:.18em}
+
   .slot .acciones{display:flex; flex-wrap:wrap; gap:1.1em; margin-top:.8em}
   .slot .accion{
     appearance:none;
@@ -717,7 +737,10 @@
 
 <div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Tapa ampliada" tabindex="-1">
   <button type="button" class="cerrar" aria-label="Cerrar">&times;</button>
+  <button type="button" class="paso ant" id="visorAnt" aria-label="Foto anterior" hidden><svg viewBox="0 0 24 24"><path d="M15 5 8 12l7 7"/></svg></button>
   <img id="visorImg" alt="">
+  <button type="button" class="paso sig" id="visorSig" aria-label="Foto siguiente" hidden><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <p class="cuenta" id="visorCuenta" hidden></p>
 </div>
 
 <div class="postit" id="postit" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Extracto">
@@ -986,31 +1009,147 @@
     </div>
   </div>
 
-  <!-- 04 · OBRA VISUAL -->
+  <!-- 04 · OBRA VISUAL · portadilla -->
   <div data-title="Obra visual">
     <p class="eyebrow"><span class="num">04</span><span>Obra visual · Escultura</span></p>
     <h2 class="p-title">Una prolongación material de ese mismo mundo</h2>
-    <p class="p-intro">Organizada por series o familias.</p>
-
-    <p class="serie">Formas orgánicas</p>
-    <div class="grid3">
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Bronce · 2021</figcaption></figure>
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Piedra · 2020</figcaption></figure>
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Cerámica · 2022</figcaption></figure>
+    <p class="p-intro">Nueve esculturas. Tocá una foto para verla en grande.</p>
+    <div class="indice">
+      <button type="button" class="row" data-ir="obra-persefone"><span class="n">01</span><span>Perséfone</span></button>
+      <button type="button" class="row" data-ir="obra-sirena"><span class="n">02</span><span>Sirena</span></button>
+      <button type="button" class="row" data-ir="obra-mulita"><span class="n">03</span><span>Mulita</span></button>
+      <button type="button" class="row" data-ir="obra-ballet"><span class="n">04</span><span>Ballet</span></button>
+      <button type="button" class="row" data-ir="obra-berlin"><span class="n">05</span><span>Berlín 1945</span></button>
+      <button type="button" class="row" data-ir="obra-olmeca"><span class="n">06</span><span>Cabeza olmeca</span></button>
+      <button type="button" class="row" data-ir="obra-artemisa"><span class="n">07</span><span>Artemisa en miniatura</span></button>
+      <button type="button" class="row" data-ir="obra-totem"><span class="n">08</span><span>Tótem de Rodas</span></button>
+      <button type="button" class="row" data-ir="obra-torito"><span class="n">09</span><span>Torito</span></button>
     </div>
+  </div>
 
-    <p class="serie">Cavidades · Restos</p>
-    <div class="grid3">
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
-      <figure><div class="ph">Escultura</div><figcaption class="pie"><b>Título s/t</b><br>Material · año</figcaption></figure>
+  <!-- 04 · ESCULTURA · Perséfone -->
+  <div data-title="Perséfone" data-id="obra-persefone">
+    <p class="eyebrow"><span class="num">01</span><span>Escultura</span></p>
+    <h3 class="o-title">Perséfone</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/persefone-1.jpg" alt="Perséfone"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/persefone-2.jpg" alt="Perséfone, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/persefone-3.jpg" alt="Perséfone, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/persefone-4.jpg" alt="Perséfone, vista 4" loading="lazy"></button>
+      </div>
     </div>
+  </div>
 
-    <p class="serie">Pinturas y estudios</p>
-    <div class="grid3">
-      <figure><div class="ph">Pintura</div><figcaption class="pie"><b>Título s/t</b><br>Óleo sobre tela</figcaption></figure>
-      <figure><div class="ph">Estudio</div><figcaption class="pie"><b>Título s/t</b><br>Técnica mixta</figcaption></figure>
-      <figure><div class="ph">Dibujo</div><figcaption class="pie"><b>Título s/t</b><br>Tinta sobre papel</figcaption></figure>
+  <!-- 04 · ESCULTURA · Sirena -->
+  <div data-title="Sirena" data-id="obra-sirena">
+    <p class="eyebrow"><span class="num">02</span><span>Escultura</span></p>
+    <h3 class="o-title">Sirena</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/sirena-1.jpg" alt="Sirena"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/sirena-2.jpg" alt="Sirena, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/sirena-3.jpg" alt="Sirena, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/sirena-4.jpg" alt="Sirena, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Mulita -->
+  <div data-title="Mulita" data-id="obra-mulita">
+    <p class="eyebrow"><span class="num">03</span><span>Escultura</span></p>
+    <h3 class="o-title">Mulita</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/mulita-1.jpg" alt="Mulita"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/mulita-2.jpg" alt="Mulita, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/mulita-3.jpg" alt="Mulita, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/mulita-4.jpg" alt="Mulita, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Ballet -->
+  <div data-title="Ballet" data-id="obra-ballet">
+    <p class="eyebrow"><span class="num">04</span><span>Escultura</span></p>
+    <h3 class="o-title">Ballet</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/ballet-1.jpg" alt="Ballet"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/ballet-2.jpg" alt="Ballet, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/ballet-3.jpg" alt="Ballet, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/ballet-4.jpg" alt="Ballet, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Berlín 1945 -->
+  <div data-title="Berlín 1945" data-id="obra-berlin">
+    <p class="eyebrow"><span class="num">05</span><span>Escultura</span></p>
+    <h3 class="o-title">Berlín 1945</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/berlin-1.jpg" alt="Berlín 1945"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/berlin-2.jpg" alt="Berlín 1945, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/berlin-3.jpg" alt="Berlín 1945, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/berlin-4.jpg" alt="Berlín 1945, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Cabeza olmeca -->
+  <div data-title="Cabeza olmeca" data-id="obra-olmeca">
+    <p class="eyebrow"><span class="num">06</span><span>Escultura</span></p>
+    <h3 class="o-title">Cabeza olmeca</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/olmeca-1.jpg" alt="Cabeza olmeca"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/olmeca-2.jpg" alt="Cabeza olmeca, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/olmeca-3.jpg" alt="Cabeza olmeca, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/olmeca-4.jpg" alt="Cabeza olmeca, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Artemisa en miniatura -->
+  <div data-title="Artemisa en miniatura" data-id="obra-artemisa">
+    <p class="eyebrow"><span class="num">07</span><span>Escultura</span></p>
+    <h3 class="o-title">Artemisa en miniatura</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/artemisa-1.jpg" alt="Artemisa en miniatura"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/artemisa-2.jpg" alt="Artemisa en miniatura, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/artemisa-3.jpg" alt="Artemisa en miniatura, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/artemisa-4.jpg" alt="Artemisa en miniatura, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Tótem de Rodas -->
+  <div data-title="Tótem de Rodas" data-id="obra-totem">
+    <p class="eyebrow"><span class="num">08</span><span>Escultura</span></p>
+    <h3 class="o-title">Tótem de Rodas</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/totem-1.jpg" alt="Tótem de Rodas"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/totem-2.jpg" alt="Tótem de Rodas, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/totem-3.jpg" alt="Tótem de Rodas, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/totem-4.jpg" alt="Tótem de Rodas, vista 4" loading="lazy"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · ESCULTURA · Torito -->
+  <div data-title="Torito" data-id="obra-torito">
+    <p class="eyebrow"><span class="num">09</span><span>Escultura</span></p>
+    <h3 class="o-title">Torito</h3>
+    <div class="obra" data-galeria>
+      <button type="button" class="foto principal" data-foto="0"><img src="obras/torito-1.jpg" alt="Torito"></button>
+      <div class="miniaturas">
+        <button type="button" class="foto" data-foto="1"><img src="obras/torito-2.jpg" alt="Torito, vista 2" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="2"><img src="obras/torito-3.jpg" alt="Torito, vista 3" loading="lazy"></button>
+        <button type="button" class="foto" data-foto="3"><img src="obras/torito-4.jpg" alt="Torito, vista 4" loading="lazy"></button>
+      </div>
     </div>
   </div>
 
@@ -1304,6 +1443,8 @@
     if (descarga) return verDescarga(descarga);
     var tapa = e.target.closest && e.target.closest('.tapa-libro');
     if (tapa) return verTapa(tapa);
+    var foto = e.target.closest && e.target.closest('.foto');
+    if (foto) return verFoto(foto);
     if (e.target.closest && e.target.closest('a, button')) return;   /* enlaces y botones de las páginas no pasan de hoja */
     if (p === 0) return go(1);
     var mid = stage.getBoundingClientRect().left + stage.getBoundingClientRect().width / 2;
@@ -1434,30 +1575,68 @@
     if (opciones.length === 1) bajar(opciones[0], nombreArchivo(titulo, opciones[0]));
   }
 
-  /* tapa en grande */
+  /* tapa o foto en grande; con varias fotos, se recorren con flechas */
   var visor = document.getElementById('visor');
   var vImg  = document.getElementById('visorImg');
-  var tapaAbierta = null;
-  function verTapa(t){
-    var img = t.querySelector('img');
-    if (!img) return;
+  var vAnt  = document.getElementById('visorAnt');
+  var vSig  = document.getElementById('visorSig');
+  var vCta  = document.getElementById('visorCuenta');
+  var serie = [], iv = 0;
+  function mostrar(){
+    var img = serie[iv];
     vImg.src = img.currentSrc || img.src;
     vImg.alt = img.alt || '';
-    tapaAbierta = t;
+    var varias = serie.length > 1;
+    vAnt.hidden = vSig.hidden = vCta.hidden = !varias;
+    if (varias) vCta.textContent = (iv + 1) + ' / ' + serie.length;
+  }
+  function abrirVisor(imgs, i){
+    if (!imgs.length) return;
+    serie = imgs; iv = i || 0;
+    mostrar();
     visor.hidden = false;
     visor.focus({preventScroll:true});
+  }
+  function pasar(d){
+    if (serie.length < 2) return;
+    iv = (iv + d + serie.length) % serie.length;
+    mostrar();
+  }
+  function verTapa(t){
+    var img = t.querySelector('img');
+    if (img) abrirVisor([img], 0);
+  }
+  function verFoto(b){
+    var g = b.closest('[data-galeria]');
+    var botones = g ? Array.prototype.slice.call(g.querySelectorAll('.foto')) : [b];
+    botones.sort(function(x, y){ return (+x.getAttribute('data-foto') || 0) - (+y.getAttribute('data-foto') || 0); });
+    var imgs = botones.map(function(x){ return x.querySelector('img'); }).filter(Boolean);
+    abrirVisor(imgs, botones.indexOf(b));
   }
   function cerrarTapa(){
     visor.hidden = true;
     vImg.removeAttribute('src');
-    tapaAbierta = null;
+    serie = [];
   }
+  vAnt.addEventListener('click', function(e){ e.stopPropagation(); pasar(-1); });
+  vSig.addEventListener('click', function(e){ e.stopPropagation(); pasar(1); });
   visor.addEventListener('click', function(e){
     if (e.target === vImg) return;     /* tocar la imagen no cierra; tocar afuera, sí */
     cerrarTapa();
   });
+  var vx0 = null, vy0 = null;
+  visor.addEventListener('touchstart', function(e){ vx0 = e.changedTouches[0].clientX; vy0 = e.changedTouches[0].clientY; }, {passive:true});
+  visor.addEventListener('touchend', function(e){
+    if (vx0 === null) return;
+    var dx = e.changedTouches[0].clientX - vx0, dy = e.changedTouches[0].clientY - vy0;
+    vx0 = null;
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) pasar(dx < 0 ? 1 : -1);
+  }, {passive:true});
   window.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && !visor.hidden){ e.preventDefault(); e.stopImmediatePropagation(); cerrarTapa(); }
+    if (visor.hidden) return;
+    if (e.key === 'Escape'){ e.preventDefault(); e.stopImmediatePropagation(); cerrarTapa(); }
+    else if (e.key === 'ArrowRight'){ e.preventDefault(); e.stopImmediatePropagation(); pasar(1); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); e.stopImmediatePropagation(); pasar(-1); }
   }, true);
 
   velo.addEventListener('click', cerrarPapel);
